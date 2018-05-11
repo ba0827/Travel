@@ -5,6 +5,18 @@
 - 多页应用：它是页面跳转时返回一个HTML文件。所具备的优点是：首屏时间快，SEO效果好；缺点是：页面之间切换慢。
 - 单页应用：它是页面跳转时利用JavaScript渲染出一个页面。所具备的优点是：页面切换时间短；缺点是：首屏时间稍慢，SEO效果差，因为搜素引擎只识别HTML页面的内容，但是不识别JavaScript渲染出来的页面。
 
+## 如何全局添加一个CSS文件
+这个CSS样式是所有组件公用的，添加的方式是在main.js中导入，比如：
+`import './assets/styles/reset.css'`
+
+
+
+## 一些以后可能用到的文件
+1、[移动端重置样式源码]()
+2、[移动端1px问题解决源码]()
+3、解决移动延迟300ms：首先下载文件`npm install fastclick --save`，接着在main.js文件中导入`import fastClick from 'fastclick'`，最后在main.js中使用`fastClick.attach(document.body)`
+
+
 
 # 项目下载和运行
 
