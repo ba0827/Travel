@@ -12,9 +12,12 @@
 
 
 ## 一些以后可能用到的文件
-1、[移动端重置样式源码]()
-2、[移动端1px问题解决源码]()
+1、[移动端重置样式源码]()<br>
+2、[移动端1px问题解决源码]()<br>
 3、解决移动延迟300ms：首先下载文件`npm install fastclick --save`，接着在main.js文件中导入`import fastClick from 'fastclick'`，最后在main.js中使用`fastClick.attach(document.body)`
+
+## 有用的网站
+1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。
 
 
 
