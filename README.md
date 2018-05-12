@@ -9,6 +9,11 @@
 这个CSS样式是所有组件公用的，添加的方式是在main.js中导入，比如：
 `import './assets/styles/reset.css'`
 
+## 使用stylus编写样式代码
+使用stylus语法编写样式代码能够很好进行代码管理和提高开发速度，首先我们需要利用npm下载相关的依赖包，下载方式如下：
+`npm install stylus --save`<br>
+`npm install stylus-loader --save`<br>
+下载好之后我们就可以使用它了，使用方式可以来看看相关的[中文文档](http://www.zhangxinxu.com/jq/stylus/)
 
 
 ## 一些以后可能用到的文件
