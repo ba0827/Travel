@@ -6,11 +6,11 @@
 - 单页应用：它是页面跳转时利用JavaScript渲染出一个页面。所具备的优点是：页面切换时间短；缺点是：首屏时间稍慢，SEO效果差，因为搜素引擎只识别HTML页面的内容，但是不识别JavaScript渲染出来的页面。
 
 ### 如何全局添加一个CSS文件
-这个CSS样式是所有组件公用的，添加的方式是在main.js中导入，比如：
+这个CSS样式是所有组件公用的，添加的方式是在main.js中导入，比如：<br>
 `import './assets/styles/reset.css'`
 
 ### 使用stylus编写样式代码
-使用stylus语法编写样式代码能够很好进行代码管理和提高开发速度，首先我们需要利用npm下载相关的依赖包，下载方式如下：
+使用stylus语法编写样式代码能够很好进行代码管理和提高开发速度，首先我们需要利用npm下载相关的依赖包，下载方式如下：<br>
 `npm install stylus --save`<br>
 `npm install stylus-loader --save`<br>
 下载好之后我们就可以使用它了，使用方式可以来看看相关的[中文文档](http://www.zhangxinxu.com/jq/stylus/)
