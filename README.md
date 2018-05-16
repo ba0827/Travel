@@ -22,8 +22,24 @@
 更多的移动端知识请转到这里————[移动端基础知识整理](https://github.com/CruxF/IMOOC/issues/4)<br>
 
 ### 提高项目的维护性
-我们可以将一些经常使用到的属性值放在一个样式表中，
+我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。<br>
 
+
+### vue-cli项目中文件路径的别名
+在项目开发之中，可能我们会写很多又长又臭的路径名，这是十分不优雅且麻烦的。比如这样的：`import '../../../assets/styles/iconfont.css'`，还有这样的：`@import '../../../assets/styles/variables.styl'`，那么在vue-cli项目中我们就可以使用一些别名来代替，比如能这么写：`import '@/assets/styles/iconfont.css'`，还能这么写：`@import '~@/assets/styles/variables.styl'`，需要注意的是在导入一个css文件到另一个css文件中，@符号前面要加个波浪线，此时这里的@代表的是整个src目录。<br>
+
+我们还能自己来定义各种文件名的别名，修改地址是build——>webpack.base.conf.js，具体改动地方看下面的代码：
+```
+resolve: {
+  extensions: ['.js', '.vue', '.json'],
+  alias: {
+    'vue$': 'vue/dist/vue.esm.js',
+    '@': resolve('src'),
+    'styles':resolve('src/assets/styles'),
+  }
+},
+```
+然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
