@@ -39,7 +39,15 @@ resolve: {
   }
 },
 ```
-然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。
+然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。<br>
+
+### 使用稳定版本的vue-awesome-swiper插件
+这是一个移动端轮播插件，使用步骤为：
+
+- 下载相关jar包`npm install vue-awesome-swiper@2.6.7 --save`
+- 使用方式以及相关配置，请到[官方网站](https://github.com/surmon-china/vue-awesome-swiper)进行查看
+
+
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
