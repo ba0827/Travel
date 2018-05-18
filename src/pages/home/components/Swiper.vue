@@ -31,17 +31,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped="scoped">
-/*样式穿透*/
+/*>>>样式穿透*/
 .wrapper >>> .swiper-pagination-bullet-active {
   background: #fff;
 }
-/*让元素的宽高比始终为31.25，为了解决网速过慢时页面抖动问题，设置height不行的*/
+/*让元素的宽高比始终为31，这是为了解决网速过慢时页面抖动问题，设置height不行的*/
 .wrapper {
   overflow: hidden;
   width: 100%;
   height: 0;
-  padding-bottom: 31.25%;
-  background: #ccc;
+  padding-bottom: 31%;
 }
 
 .swiper-img {
