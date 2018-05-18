@@ -94,6 +94,23 @@ resolve: {
 这款插件的作用是能帮助我们更方便的调试vue程序、发现bug和数据传输的过程，说白了就是vue程序调试工具。[这是下载地址](https://github.com/vuejs/vue-devtools)<br>
 
 
+### 为什么使用axios这个工具来发送ajax获取后台数据？
+目前知道发送ajax的手段有以下几种：
+- 原生ajax请求
+- jQuery中封装好的ajax请求
+- 浏览器自带的fetch函数
+
+在vue项目中发送ajax请求的工具有以下两种：
+- vue-resource
+- axios
+- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。
+
+
+**使用axios开发步骤：** 
+- 安装aixos：`npm install axios --save`
+
+
+
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
 
