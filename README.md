@@ -22,7 +22,49 @@
 更多的移动端知识请转到这里————[移动端基础知识整理](https://github.com/CruxF/IMOOC/issues/4)<br>
 
 ### 提高项目的维护性
-我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。<br>
+我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。比如我们可以定义一个公共样式文件，在里面用一个变量存放经常要用到的单独样式，示例代码如下：
+```
+variables.styl文件中定义
+$bgColor = #00bcd4
+$darkTextColor = #333
+
+Header.vue文件中使用
+<style lang="stylus" scoped="scoped">
+@import '~styles/variables.styl'
+.header {
+  display: flex;
+  height: .86rem;
+  line-height: .86rem;
+  background: $bgColor;
+  color: #fff;
+}
+```
+
+除了定义变量来存放经常要用到的单独样式，我们还能定义方法来存放一组要经常用到的样式，示例代码如下：
+```
+variables.styl文件中定义
+ellipsis(){
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+Header.vue文件中使用
+<style lang="stylus" scoped="scoped">
+@import '~styles/variables.styl'
+.icon-desc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: .44rem;
+  line-height: .44rem;
+  text-align: center;
+  color: $darkTextColor;
+  ellipsis();
+}
+```
+<br>
 
 
 ### vue-cli项目中文件路径的别名
@@ -39,7 +81,18 @@ resolve: {
   }
 },
 ```
-然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。
+然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。<br>
+
+### 使用稳定版本的vue-awesome-swiper插件
+这是一个移动端轮播插件，使用步骤为：
+
+- 下载相关jar包`npm install vue-awesome-swiper@2.6.7 --save`
+- 使用方式以及相关配置，请到[官方网站](https://github.com/surmon-china/vue-awesome-swiper)进行查看
+
+
+### 使用Chrome浏览器插件vue devtools
+这款插件的作用是能帮助我们更方便的调试vue程序、发现bug和数据传输的过程，说白了就是vue程序调试工具。[这是下载地址](https://github.com/vuejs/vue-devtools)<br>
+
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
