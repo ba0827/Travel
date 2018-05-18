@@ -22,7 +22,49 @@
 更多的移动端知识请转到这里————[移动端基础知识整理](https://github.com/CruxF/IMOOC/issues/4)<br>
 
 ### 提高项目的维护性
-我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。<br>
+我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。比如我们可以定义一个公共样式文件，在里面用一个变量存放经常要用到的单独样式，示例代码如下：
+```
+variables.styl文件中定义
+$bgColor = #00bcd4
+$darkTextColor = #333
+
+Header.vue文件中使用
+<style lang="stylus" scoped="scoped">
+@import '~styles/variables.styl'
+.header {
+  display: flex;
+  height: .86rem;
+  line-height: .86rem;
+  background: $bgColor;
+  color: #fff;
+}
+```
+
+除了定义变量来存放经常要用到的单独样式，我们还能定义方法来存放一组要经常用到的样式，示例代码如下：
+```
+variables.styl文件中定义
+ellipsis(){
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+Header.vue文件中使用
+<style lang="stylus" scoped="scoped">
+@import '~styles/variables.styl'
+.icon-desc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: .44rem;
+  line-height: .44rem;
+  text-align: center;
+  color: $darkTextColor;
+  ellipsis();
+}
+```
+<br>
 
 
 ### vue-cli项目中文件路径的别名
