@@ -85,6 +85,7 @@ export default {
   height: 0;
   padding-bottom: 50%;
   background: green;
+  margin-top: .1rem;
 }
 /*增加能够拖动的Y轴区域*/
 .icons >>> .swiper-container {
