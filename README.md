@@ -98,18 +98,37 @@ resolve: {
 目前知道发送ajax的手段有以下几种：
 - 原生ajax请求
 - jQuery中封装好的ajax请求
-- 浏览器自带的fetch函数
+- 浏览器自带的fetch函数<br>
 
 在vue项目中发送ajax请求的工具有以下两种：
 - vue-resource
 - axios
-- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。
+- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。<br>
 
 
 **使用axios开发步骤：** 
 - 安装aixos：`npm install axios --save`
 - 在单个组件中导入它：`import axios from 'axios'`
+- 来看看一个简单的代码实例：
+```
+import axios from 'axios'
+export default {
+  name: 'Home',
+  methods: {
+    getHomeInfo () {
+      axios.get('static/mock/index.json').then(this.getHomeInfoSucc)
+    },
+    getHomeInfoSucc (res) {
+      console.log(res)
+    }
+  },
+  mounted () {
+    this.getHomeInfo()
+  }
+}
+```
 
+不过以上代码有个问题就是ajax请求的只是本地的数据，如果要请求服务器的数据，那么该做哪些呢？
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
