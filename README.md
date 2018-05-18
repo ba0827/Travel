@@ -108,7 +108,7 @@ resolve: {
 
 **使用axios开发步骤：** 
 - 安装aixos：`npm install axios --save`
-
+- 在单个组件中导入它：`import axios from 'axios'`
 
 
 ### 有用的网站
@@ -120,6 +120,9 @@ icon新建一个项目，在官方图标库中找到相应的icon，加入购物
 iconfont.css是全局样式，如何去使用前面有提到。在项目中是这么来使用的，首先在相应的区域添加一个iconfont的类，然后来那个区域使用在iconfont官网复制下来的代码，下面请看案例：<br>
 `<span class="iconfont">&#xe624;</span>`
 
+
+### 如何设置忽略文件不上传到云端？
+有个.gitignore文件配置，只要将该文件目录或者具体的文件名配置进去即可，不过目前我在项目中还没找到，估计改位置了，有空再来好好找一下。
 
 
 # 项目下载和运行
