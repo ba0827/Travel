@@ -189,6 +189,21 @@ export default {
 ```
 
 
+### Better-scroll的使用及字母表布局
+有时候我们开发项目的时候，会有类似与手机联系人浏览模式的需求，也就是向下滚动内容的需求。开发这种需求，我们往往会使用一个插件，叫做————[better-scroll](https://github.com/ustbhuangyi/better-scroll)，国人自主开发移动端（现已支持 PC 端）各种滚动场景需求的插件，文档十分全面，很容易就能入手，下面我们开始正式使用它：
+- 下载安装：`npm install better-scroll --save`
+- 根据官网的“起步”介绍，我们知道首先得需要一个符合标准的HTML结构（具体去看[官方介绍](https://github.com/ustbhuangyi/better-scroll)），我们需要做的就是做灵活的变动，比如获取DOM数据那块，我们开发该项目是基于Vue的，于是可以根据关键字ref获取到html结构的DOM，具体变动看下面代码：
+```
+import Bscroll from 'better-scroll'
+export default {
+  name: 'CityList',
+  mounted () {
+    this.scroll = new Bscroll(this.$refs.wrapper)
+  }
+}
+```
+
+
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
 
