@@ -142,6 +142,33 @@ proxyTable: {
  },
 ```
 以上代码的位置在vue-cli项目中的config文件夹下的index.js文件中。它的含义是：当页面请求后台地址是api目录的下面时，那么就将请求转移到本地端口为8080的本地服务器，并且请求地址是以api为开头时，就将地址转换成/statick/mock。这个转发地址的功能是由webpack中webpack-dev-server这个工具提供的。
+- 最后当我以下面这段代码去请求数据的时候也能够成功
+```
+import axios from 'axios'
+export default {
+  name: 'Home',
+  components: {
+    HomeHeader,
+    HomeSwiper,
+    HomeIcons,
+    HomeRecommend,
+    HomeWeekend
+  },
+  methods: {
+    getHomeInfo () {
+      axios.get('/api/index.json').then(this.getHomeInfoSucc)
+    },
+    getHomeInfoSucc (res) {
+      console.log(res)
+    }
+  },
+  mounted () {
+    this.getHomeInfo()
+  }
+}
+</script>
+```
+
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
