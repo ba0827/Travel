@@ -2,8 +2,8 @@
   <div>
     <div class="recommend-title">热销推荐</div>
     <ul>
-      <li class="item border-bottom" v-for="item of recommendList" :key="item.id">
-        <img class="item-img" src="" />
+      <li class="item border-bottom" v-for="item of list" :key="item.id">
+        <img class="item-img" :src="item.imgUrl" />
         <div class="item-info">
           <p class="item-title">{{item.title}}</p>
           <p class="item-desc">{{item.desc}}</p>
@@ -17,25 +17,8 @@
 <script>
 export default {
   name: 'HomeRecommend',
-  data () {
-    return {
-      recommendList: [{
-        id: '0001',
-        imgUrl: '',
-        title: '海洋世界',
-        desc: '浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园'
-      }, {
-        id: '0002',
-        imgUrl: '',
-        title: '海洋世界',
-        desc: '浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园'
-      }, {
-        id: '0003',
-        imgUrl: '',
-        title: '海洋世界',
-        desc: '浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园浪漫的海洋世界公园'
-      }]
-    }
+  props: {
+    list: Array
   }
 }
 </script>
@@ -50,14 +33,12 @@ export default {
 }
 .item {
   display: flex;
-  background: #ccc;
   overflow: hidden;
   height: 1.9rem;
 }
 .item-img {
   width: 1.7rem;
   height: 1.7rem;
-  background: #25A4BB;
   padding: .1rem;
 }
 .item-info {
@@ -71,7 +52,7 @@ export default {
 }
 .item-desc {
   line-height: .4rem;
-  color: #eee;
+  color: #ccc;
   ellipsis();
 }
 .item-button {
