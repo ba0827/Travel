@@ -128,7 +128,20 @@ export default {
 }
 ```
 
-不过以上代码有个问题就是ajax请求的只是本地的数据，如果要请求服务器的数据，那么该做哪些呢？
+不过以上代码有个问题就是ajax请求的只是本地的数据，如果要请求服务器的数据，也就是项目需要上线前，那么该做哪些工作呢？
+- 首先请求地址修改为后台接口地址，比如`axios.get('/api/index.json').then(this.getHomeInfoSucc)`；
+- 转发地址，即我们请求后台接口地址的时候，成功后会将该地址转换成本地的地址进行测试，具体代码如下：
+```
+proxyTable: {
+   '/api': {
+     target: 'http://localhost:8080',
+     pathRewrite: {
+       '^/api': '/static/mock'
+     }
+   }
+ },
+```
+以上代码的位置在vue-cli项目中的config文件夹下的index.js文件中。它的含义是：当页面请求后台地址是api目录的下面时，那么就将请求转移到本地端口为8080的本地服务器，并且请求地址是以api为开头时，就将地址转换成/statick/mock。这个转发地址的功能是由webpack中webpack-dev-server这个工具提供的。
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
