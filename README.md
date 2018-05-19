@@ -94,6 +94,82 @@ resolve: {
 这款插件的作用是能帮助我们更方便的调试vue程序、发现bug和数据传输的过程，说白了就是vue程序调试工具。[这是下载地址](https://github.com/vuejs/vue-devtools)<br>
 
 
+### 为什么使用axios这个工具来发送ajax获取后台数据？
+目前知道发送ajax的手段有以下几种：
+- 原生ajax请求
+- jQuery中封装好的ajax请求
+- 浏览器自带的fetch函数<br>
+
+在vue项目中发送ajax请求的工具有以下两种：
+- vue-resource
+- axios
+- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。<br>
+
+
+**使用axios开发步骤：** 
+- 安装aixos：`npm install axios --save`
+- 在单个组件中导入它：`import axios from 'axios'`
+- 来看看一个简单的代码实例：
+```
+import axios from 'axios'
+export default {
+  name: 'Home',
+  methods: {
+    getHomeInfo () {
+      axios.get('static/mock/index.json').then(this.getHomeInfoSucc)
+    },
+    getHomeInfoSucc (res) {
+      console.log(res)
+    }
+  },
+  mounted () {
+    this.getHomeInfo()
+  }
+}
+```
+
+不过以上代码有个问题就是ajax请求的只是本地的数据，如果要请求服务器的数据，也就是项目需要上线前，那么该做哪些工作呢？
+- 首先请求地址修改为后台接口地址，比如`axios.get('/api/index.json').then(this.getHomeInfoSucc)`；
+- 转发地址，即我们请求后台接口地址的时候，成功后会将该地址转换成本地的地址进行测试，具体代码如下：
+```
+proxyTable: {
+   '/api': {
+     target: 'http://localhost:8080',
+     pathRewrite: {
+       '^/api': '/static/mock'
+     }
+   }
+ },
+```
+以上代码的位置在vue-cli项目中的config文件夹下的index.js文件中。它的含义是：当页面请求后台地址是api目录的下面时，那么就将请求转移到本地端口为8080的本地服务器，并且请求地址是以api为开头时，就将地址转换成/statick/mock。这个转发地址的功能是由webpack中webpack-dev-server这个工具提供的。
+- 最后当我以下面这段代码去请求数据的时候也能够成功
+```
+import axios from 'axios'
+export default {
+  name: 'Home',
+  components: {
+    HomeHeader,
+    HomeSwiper,
+    HomeIcons,
+    HomeRecommend,
+    HomeWeekend
+  },
+  methods: {
+    getHomeInfo () {
+      axios.get('/api/index.json').then(this.getHomeInfoSucc)
+    },
+    getHomeInfoSucc (res) {
+      console.log(res)
+    }
+  },
+  mounted () {
+    this.getHomeInfo()
+  }
+}
+</script>
+```
+
+
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
 
@@ -103,6 +179,9 @@ icon新建一个项目，在官方图标库中找到相应的icon，加入购物
 iconfont.css是全局样式，如何去使用前面有提到。在项目中是这么来使用的，首先在相应的区域添加一个iconfont的类，然后来那个区域使用在iconfont官网复制下来的代码，下面请看案例：<br>
 `<span class="iconfont">&#xe624;</span>`
 
+
+### 如何设置忽略文件不上传到云端？
+有个.gitignore文件配置，只要将该文件目录或者具体的文件名配置进去即可，不过目前我在项目中还没找到，估计改位置了，有空再来好好找一下。
 
 
 # 项目下载和运行
