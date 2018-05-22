@@ -378,6 +378,32 @@ methods: {
 }
 ```
 
+以上代码性能偏低，现在需要提升一下。首先使用updated()生命周期函数缓存固定不变的量，比如：
+```
+updated () {
+  // startY在data中已经定义
+  this.startY = this.$refs['A'][0].offsetTop
+}
+```
+由于在滚动的时候的，handleTouchMove方法执行的频率非常高，现在我们需要使用一个定时器来限制该方法的执行频率，提高性能，俗称函数节流，具体看以下代码：
+```
+handleTouchMove(e) {
+  if(this.touchStatus) {
+    if(this.timer) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      const touchY = e.touches[0].clientY - 79
+      const index = Math.floor((touchY - this.startY) / 20)
+      if(index >= 0 && index < this.letters.length) {
+        this.$emit('change', this.letters[index])
+      }
+    }, 16)
+  }
+}
+```
+好了，这块的功能完美实现了！
+
 
 3、实现搜索数据并显示结果的功能<br>
 
@@ -396,7 +422,7 @@ data () {
 }
 ```
 
-接着我们使用watch监听keyword这个变量的变化，在监听器中我们需要使用定时器来进行数据节流，提高程序的性能。我们一起看以下来进一步分析：
+接着我们使用watch监听keyword这个变量的变化，在监听器中我们需要使用定时器来使函数节流，提高程序的性能。我们一起看以下来进一步分析：
 ```
 watch: {
   keyword() {
