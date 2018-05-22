@@ -244,8 +244,8 @@ export default {
   watch: {
     letter () {
       if (this.letter) {
-        // 无法获取到this.$refs[this.letter]的值
-        var Element = this.$refs[this.letter][0]
+        // 无法获取到this.$refs[this.letter]的值，和视频中以及自己的假想完全不同啊！
+        var Element = this.$refs[this.letter][0]
         console.log(Element)
         this.scroll.scrollToElement(Element)
       }
