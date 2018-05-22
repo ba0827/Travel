@@ -204,7 +204,59 @@ export default {
 ```
 
 ### 项目难点
-1、
+1、在城市列表实现，实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
+
+【分析】<br>
+在这一整个页面，总共由三个组件组成，那么首先需要考虑到的是如何去传值？该传什么值？接收到值后应该做什么？按照这个思路，我们做一下具体的代码实现。<br>
+
+【实现】<br>
+由于组件之间的关系并不复杂，层次也不是很深，因此我们直接使用父子组件传值的方式即可。首先我们在数据最开始流出的地方(Alphabet.vue)定义一个点击字母事件触发发布订阅模式，然后发布一个事件，并且将数据传递出去：
+```
+handleLetterClick (e) {
+   this.$emit('change', e.target.innerText)
+},
+```
+其中e.target.innerText代表的是目标元素的内容，也就是item的值，而item是从cities对象中遍历出来的A-Z字母。<br>
+
+接着我们在父组件(City.vue)监听/订阅这个事件，接收传递过来的值，并将值传给最终的一个子组件(List.vue)：
+```
+HTML
+<city-list :cities="cities" :hot="hotCities" :letter="letter"></city-list>
+<city-alphabet :cities="cities" @change="handleLetterChange"></city-alphabet>
+
+JS
+handleLetterChange (letterValue) {
+  this.letter = letterValue
+}
+```
+其中letterValue代表的是传递过来的 e.target.innerText的值，然后将这个值以父组件向子组件传递的方式传给List.vue这个子组件。<br>
+
+最后我们在List.vue这个子组件中使用better-scroll这个插件实现内容定位功能，具体代码如下：
+```
+import Bscroll from 'better-scroll'
+export default {
+  name: 'CityList',
+  props: {
+    hot: Array,
+    cities: Object,
+    letter: String
+  },
+  watch: {
+    letter () {
+      if (this.letter) {
+        // 无法获取到this.$refs[this.letter]的值
+        var Element = this.$refs[this.letter][0]
+        console.log(Element)
+        this.scroll.scrollToElement(Element)
+      }
+    }
+  },
+  mounted () {
+    this.scroll = new Bscroll(this.$refs.wrapper)
+  }
+}
+```
+this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的内容
 
 
 ### 有用的网站
