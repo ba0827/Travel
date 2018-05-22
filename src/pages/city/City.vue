@@ -40,8 +40,8 @@ export default {
         this.hotCities = data.hotCities
       }
     },
-    handleLetterChange (letterValue) {
-      this.letter = letterValue
+    handleLetterChange (letter) {
+      this.letter = letter
     }
   },
   mounted () {

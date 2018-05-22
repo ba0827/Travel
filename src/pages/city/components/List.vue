@@ -41,10 +41,7 @@ export default {
   watch: {
     letter () {
       if (this.letter) {
-        console.log(this.letter)
-        // 无法获取到this.$refs[this.letter]的值
         var Element = this.$refs[this.letter][0]
-        console.log(Element)
         this.scroll.scrollToElement(Element)
       }
     }
