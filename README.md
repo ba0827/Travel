@@ -271,7 +271,7 @@ export default {
 ```
 this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的所有内容，这是一个数组，要将其转化为一个div区域的很简单，只要这么写this.$refs[this.letter][0]即可，之后再把这个div区域传到this.scroll.scrollToElement中则可完成滚动需求。以上的值各代表什么可以使用console.log进行测试，最后要注意的一点是在HTML代码中要有个值和this.letter对应才行，我们这么来定义：`<div class="area" v-for="(item,key) of cities" :key="key" :ref="key">`<br>
 
-【bug问题解决】
+【bug问题解决】<br>
 以上“无法获取到this.$refs[this.letter]的值”的bug是由于在数据最开始传递的地方HTML代码多了一层div，下面是错误的HTML结构代码：
 ```
 <template>
@@ -377,6 +377,81 @@ methods: {
   }
 }
 ```
+
+以上代码性能偏低，现在需要提升一下。首先使用updated()生命周期函数缓存固定不变的量，比如：
+```
+updated () {
+  // startY在data中已经定义
+  this.startY = this.$refs['A'][0].offsetTop
+}
+```
+由于在滚动的时候的，handleTouchMove方法执行的频率非常高，现在我们需要使用一个定时器来限制该方法的执行频率，提高性能，俗称函数节流，具体看以下代码：
+```
+handleTouchMove(e) {
+  if(this.touchStatus) {
+    if(this.timer) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      const touchY = e.touches[0].clientY - 79
+      const index = Math.floor((touchY - this.startY) / 20)
+      if(index >= 0 && index < this.letters.length) {
+        this.$emit('change', this.letters[index])
+      }
+    }, 16)
+  }
+}
+```
+好了，这块的功能完美实现了！
+
+
+3、实现搜索数据并显示结果的功能<br>
+
+【分析】<br>
+首先第一步我们肯定是要先把HTML结构代码和CSS布局样式写好，之后我们需要使用v-model实现双向绑定数据，为了能够实时的展示出搜索结果，那么毫无疑问，这种单独数据的变化使用watch是最佳的选择，接着我们就要考虑下，该如何将得到数据遍历出来，是通过一个数组？还是说得通过两个数组？如果是需要通过两个数组，那么原因是什么？以及为什么需要遍历数组，难道结果不是唯一的吗？带着这些疑问，我们来看代码实现<br>
+
+【实现】<br>
+首先我们需要定义一个变量实现双向数据绑定以及wath函数需要监听的变量函数，同时定义一个数据用来存放搜素结果：
+```
+data () {
+  return {
+    keyword: '',
+    list: [],
+    timer: null
+  }
+}
+```
+
+接着我们使用watch监听keyword这个变量的变化，在监听器中我们需要使用定时器来使函数节流，提高程序的性能。我们一起看以下来进一步分析：
+```
+watch: {
+  keyword() {
+    if(this.timer) {
+      clearTimeout(this.timer)
+    }
+    if(!this.keyword) {
+      this.list = []
+      return
+    }
+    this.timer = setTimeout(() => {
+      const result = []
+      // 查看json文件可知i代表的是A-Z字母
+      // value代表的是每一个字母中的对象
+      for(let i in this.cities) {
+        this.cities[i].forEach((value) => {
+          if(value.spell.indexOf(this.keyword) > -1 || value.name.indexOf(this.keyword) > -1) {
+            result.push(value)
+          }
+        })
+      }
+      this.list = result
+    }, 100)
+  }
+}
+```
+通过以上代码我们可知在监听器中又定义一个数组存放搜索结果，首先使用for-in将i值遍历了出来，接着又使用forEach遍历搜索每个i值对应的spell值和name值，如果这两个值存在的话，那么就将一整个value对象加入到result这个数组中，然后再让list等于result这个数组，从而达到了提高性能并且方便了其他功能的实现，如果没有resutl这个中间数组的话，那么当搜索框的数据在变化的时候就会发生错误，但是通过中间数组，这种情况就不会发生，因为Vue中的数据是双向绑定的。<br>
+
+最后就是一些HTML结构代码中的一些合理的判断显示，很简单，看源码就能明白，在这不说了。<br>
 
 
 
