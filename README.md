@@ -271,6 +271,48 @@ export default {
 ```
 this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的所有内容，这是一个数组，要将其转化为一个div区域的很简单，只要这么写this.$refs[this.letter][0]即可，之后再把这个div区域传到this.scroll.scrollToElement中则可完成滚动需求。以上的值各代表什么可以使用console.log进行测试，最后要注意的一点是在HTML代码中要有个值和this.letter对应才行，我们这么来定义：`<div class="area" v-for="(item,key) of cities" :key="key" :ref="key">`<br>
 
+【bug问题解决】
+以上“无法获取到this.$refs[this.letter]的值”的bug是由于在数据最开始传递的地方HTML代码多了一层div，下面是错误的HTML结构代码：
+```
+<template>
+<div class="alphabet">
+  <ul class="list">
+    <li
+      class="item"
+      v-for="item of letters"
+      :key="item"
+      :ref="item"
+      @click="handleLetterClick"
+      @touchstart.prevent="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+    >
+      {{item}}
+    </li>
+  </ul>
+</div>
+</template>
+```
+下面是正确的HTML结构代码，至于是什么原因，我也是丈二和尚摸不着头脑：
+```
+<template>
+  <ul class="list">
+    <li
+      class="item"
+      v-for="item of letters"
+      :key="item"
+      :ref="item"
+      @touchstart.prevent="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+      @click="handleLetterClick"
+    >
+      {{item}}
+    </li>
+  </ul>
+</template>
+```
+
 
 2、在城市列表实现滚动右侧的字母表，左侧区域能够到达指定位置。<br>
 
