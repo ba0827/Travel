@@ -256,7 +256,7 @@ export default {
   }
 }
 ```
-this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的内容
+this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的所有内容，这是一个数组，要将其转化为一个div区域的很简单，只要这么写this.$refs[this.letter][0]即可，之后再把这个div区域传到this.scroll.scrollToElement中则可完成滚动需求。以上的值各代表什么可以使用console.log进行测试，最后要注意的一点是在HTML代码中要有个值和this.letter对应才行，我们这么来定义：`<div class="area" v-for="(item,key) of cities" :key="key" :ref="key">`
 
 
 ### 有用的网站
