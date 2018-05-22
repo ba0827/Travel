@@ -2,9 +2,11 @@
 根据慕课网实战课程——[Vue2.0实战带你开发去哪儿APP](https://coding.imooc.com/class/203.html)开发出来的微型项目，通过这个项目，进一步巩固自己的Vue实践能力。在这之前，还用大白话整理一篇关于[Vue基础知识的整理](https://github.com/CruxF/Vue-base/issues/1)，真的是大白话啊，因此描述的不会是很官方和标准，可能也有些是理解错了（轻点喷....），唯一的亮点就是看一遍真的就能get到Vue大部分的知识了，在这里看完一遍并且理解的话，马上撸一遍[Vue.js的官方文档](https://cn.vuejs.org/)，你会受益匪浅的！
 
 
+
 ### 多页应用和单页应用的区别
 - 多页应用：它是页面跳转时返回一个HTML文件。所具备的优点是：首屏时间快，SEO效果好；缺点是：页面之间切换慢。
 - 单页应用：它是页面跳转时利用JavaScript渲染出一个页面。所具备的优点是：页面切换时间短；缺点是：首屏时间稍慢，SEO效果差，因为搜素引擎只识别HTML页面的内容，但是不识别JavaScript渲染出来的页面。
+
 
 
 ### 如何全局使用一个CSS文件
@@ -25,6 +27,7 @@
 ```
 
 
+
 ### 使用stylus编写样式代码
 使用stylus语法编写样式代码能够很好进行代码管理和提高开发速度，首先我们需要利用npm下载相关的依赖包，下载方式如下：<br>
 `npm install stylus --save`<br>
@@ -32,11 +35,13 @@
 下载好之后我们就可以使用它了，使用方式可以来看看相关的[中文文档](http://www.zhangxinxu.com/jq/stylus/)
 
 
+
 ### 项目单位的运算方式
 拿首页头部来说，设计稿的尺寸为736x86，即设计稿头部区域高为86px（物理像素）。由于设计师给的是2倍的设计稿，于是CSS样式中这个头部区域的高得为43px（逻辑像素）。在这个项目开发中，是使用rem这个单位，因为rem是相对于根元素的字体大小的单位，该怎么理解呢？比如在全局样式reset.css中，我们设置了html的font-size为50px，则1rem=50px。那么此时逻辑像素为43px转化为rem单位值为多少呢？下面来看一看运算过程：<br>
 由1rem=50px  ==>  50x?=43  ==>  ?=0.86  ==>  则此时的43px=0.86rem<br>
 
 更多的移动端知识请转到这里————[移动端基础知识整理](https://github.com/CruxF/IMOOC/issues/4)<br>
+
 
 
 ### 提高项目的维护性
@@ -85,6 +90,7 @@ Header.vue文件中使用
 <br>
 
 
+
 ### vue-cli项目中文件路径的别名
 在项目开发之中，可能我们会写很多又长又臭的路径名，这是十分不优雅且麻烦的。比如这样的：`import '../../../assets/styles/iconfont.css'`，还有这样的：`@import '../../../assets/styles/variables.styl'`，那么在vue-cli项目中我们就可以使用一些别名来代替，比如能这么写：`import '@/assets/styles/iconfont.css'`，还能这么写：`@import '~@/assets/styles/variables.styl'`，需要注意的是在导入一个css文件到另一个css文件中，@符号前面要加个波浪线，此时这里的@代表的是整个src目录。<br>
 
@@ -102,6 +108,7 @@ resolve: {
 然后我们就能把一开始的导入文件地址这么写：`import 'styles/iconfont.css'`，还有这么写的：`@import '~/styles/variables.styl'`。这样修改之后导入文件路径的书写是不是方便了很多？不过需要注意的是修改了webpack.base.conf.js文件记得重新npm run dev运行项目。<br>
 
 
+
 ### 使用稳定版本的vue-awesome-swiper插件
 这是一个移动端轮播插件，使用步骤为：
 
@@ -109,8 +116,10 @@ resolve: {
 - 使用方式以及相关配置，请到[官方网站](https://github.com/surmon-china/vue-awesome-swiper)进行查看
 
 
+
 ### 使用Chrome浏览器插件vue devtools
 这款插件的作用是能帮助我们更方便的调试vue程序、发现bug和数据传输的过程，说白了就是vue程序调试工具。[这是下载地址](https://github.com/vuejs/vue-devtools)<br>
+
 
 
 ### 为什么使用axios这个工具来发送ajax获取后台数据？
@@ -123,6 +132,7 @@ resolve: {
 - vue-resource
 - axios
 - 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。<br>
+
 
 
 **使用axios开发步骤：** 
@@ -189,6 +199,7 @@ export default {
 ```
 
 
+
 ### Better-scroll的使用及字母表布局
 有时候我们开发项目的时候，会有类似与手机联系人浏览模式的需求，也就是向下滚动内容的需求。开发这种需求，我们往往会使用一个插件，叫做————[better-scroll](https://github.com/ustbhuangyi/better-scroll)，国人自主开发移动端（现已支持 PC 端）各种滚动场景需求的插件，文档十分全面，很容易就能入手，下面我们开始正式使用它：
 - 下载安装：`npm install better-scroll --save`
@@ -203,8 +214,10 @@ export default {
 }
 ```
 
+
+
 ### 项目难点
-1、在城市列表实现，实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
+1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
 
 【分析】<br>
 在这一整个页面，总共由三个组件组成，那么首先需要考虑到的是如何去传值？该传什么值？接收到值后应该做什么？按照这个思路，我们做一下具体的代码实现。<br>
@@ -256,7 +269,16 @@ export default {
   }
 }
 ```
-this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的所有内容，这是一个数组，要将其转化为一个div区域的很简单，只要这么写this.$refs[this.letter][0]即可，之后再把这个div区域传到this.scroll.scrollToElement中则可完成滚动需求。以上的值各代表什么可以使用console.log进行测试，最后要注意的一点是在HTML代码中要有个值和this.letter对应才行，我们这么来定义：`<div class="area" v-for="(item,key) of cities" :key="key" :ref="key">`
+this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取到id为A-Z区域的所有内容，这是一个数组，要将其转化为一个div区域的很简单，只要这么写this.$refs[this.letter][0]即可，之后再把这个div区域传到this.scroll.scrollToElement中则可完成滚动需求。以上的值各代表什么可以使用console.log进行测试，最后要注意的一点是在HTML代码中要有个值和this.letter对应才行，我们这么来定义：`<div class="area" v-for="(item,key) of cities" :key="key" :ref="key">`<br>
+
+
+2、在城市列表实现滚动右侧的字母表，左侧区域能够到达指定位置。<br>
+
+【分析】<br>
+谈到移动端的滚动事件，那么肯定和touch事件逃脱不了关系。我们现在需要
+
+
+
 
 
 ### 有用的网站
