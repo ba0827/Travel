@@ -275,9 +275,66 @@ this.letter代表的是A-Z，也可以把this.$refs[this.letter]当做是获取�
 2、在城市列表实现滚动右侧的字母表，左侧区域能够到达指定位置。<br>
 
 【分析】<br>
-谈到移动端的滚动事件，那么肯定和touch事件逃脱不了关系。我们现在需要
+谈到移动端的滚动事件，那么肯定和touch事件逃脱不了关系。我们现在需要明白的如何获取到滚动的值并且将它传递过去，下面看代码实现<br>
 
-
+【实现】<br>
+首先，我们需要将A-Z的数据遍历出来并存储到某个数组中：
+```
+computed: {
+  letters () {
+    const letters = []
+    for (let i in this.cities) {
+      letters.push(i)
+    }
+    // console.log(letters)
+    return letters
+  }
+}
+```
+接着我们在遍历的时候也需要将对象改为数组,同时也要设置各种手指触摸事件和ref，设置reg目的是为了获取A这个区域距离顶部的距离，具体请看最后的代码：
+```
+<li
+  class="item"
+   v-for="item of letters"
+   :key="item"
+   :ref="item"
+   @click="handleLetterClick"
+   @touchstart.prevent="handleTouchStart"
+   @touchmove="handleTouchMove"
+   @touchend="handleTouchEnd"
+ >
+  {{item}}
+</li>
+```
+最后就是核心代码实现，其中的原理请看注释：
+```
+methods: {
+  handleLetterClick (e) {
+    this.$emit('change', e.target.innerText)
+  },
+  handleTouchStart () {
+    this.touchStatus = true
+  },
+  handleTouchMove (e) {
+    if (this.touchStatus) {
+      // 计算A到顶部的距离，这是个固定值
+      const startY = this.$refs['A'][0].offsetTop
+      // console.log(startY)
+      // 计算手指距离顶部的距离，这是个不固定值。79代表的是城市选择和搜索框区域的高度
+      const touchY = e.touches[0].clientY - 79
+      // console.log(touchY)
+      // 计算对应数组的下标值，每个字母的高度为20px
+      const index = Math.floor((touchY - startY) / 20)
+      if (index >= 0 && index < this.letters.length) {
+        this.$emit('change', this.letters[index])
+      }
+    }
+  },
+  handleTouchEnd () {
+    this.touchStatus = false
+  }
+}
+```
 
 
 
