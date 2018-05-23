@@ -425,6 +425,40 @@ export default {
 </script>
 ```
 
+以上是单个数据的传递简洁写法，下面是传递数据方法的简洁写法：
+```
+<script>
+import Bscroll from 'better-scroll'
+//import进来mapActions这个玩意
+import { mapState, mapActions } from 'vuex'
+export default {
+  name: 'CityList',
+  props: {
+    hot: Array,
+    cities: Object,
+    letter: String
+  },
+  computed: {
+    ...mapState({
+      currentCity: 'city'
+    })
+  },
+  methods: {
+    handleCityClick (city) {
+      //直接使用这个方法传值，而不是this.$store.dispatch('changeCity', city)
+      this.changeCity(city)
+      this.$router.push({
+        path: '/'
+      })
+    },
+    //映射changeCity这个方法
+    ...mapActions(['changeCity'])
+  }
+}
+</script>
+```
+
+
 
 ### 项目难点
 1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
