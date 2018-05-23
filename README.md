@@ -218,7 +218,7 @@ export default {
 ### 使用Vuex实现数据共享
 一般情况下，我们开发一个vue项目，都是使用组件化的方式来进行开发，使得项目更加容易管理和维护。虽然组件化开发有其优点，但是缺点也存在，比如组件与组件之间的数据联动以及管理，父子组件传值还好说，组件与组件的传值那就麻烦了，而且不容易进行数据开发和管理。于是在这种情况下，vuex出来了，我们可以先到[官方网站](https://vuex.vuejs.org/zh/)看vuex的具体介绍。<br>
 
-用大白话说就是vuex是一个公共数据存放仓库，其中的数据是和N个组件共享的，当在某个组件内改变了该数据，那么另一些与之关联的组件数据也会发生变化。下面来看具体的使用步骤：
+用大白话说就是vuex是一个公共数据存放仓库，其中的数据是和N个组件共享的，当在某个组件内改变了该数据，那么另一些与之关联的组件数据也会发生变化。下面来看基础的使用步骤：
 - 1、下载安装：npm install vuex --save
 - 2、创建一个存储数据的仓库，为了方便管理我们可以在src目录下创建一个store目录，然后在里面创建数据仓库文件index.js，具体代码如下：
 ```
@@ -261,6 +261,78 @@ new Vue({
 </div>
 ```
 
+以上就是基础的vuex使用方式，下面我们需要实现的触发某事件，然后数据发生变化的操作，在开始看具体之前，先来琢磨一下官方给出的这张数据流向图：
+
+
+结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
+```
+//HTML代码，定义一个点击事件，并传递参数
+<div class="title border-bottom">热门城市</div>
+<div class="button-list">
+  <div class="button-wrapper" v-for="item of hot" :key="item.id" @click="handleCityClick(item.name)">
+    <div class="button">{{item.name}}</div>
+  </div>
+</div>
+
+//Vue实例代码，通过dispatch派发成一个事件，并接收传值然后再传出去
+methods: {
+  handleCityClick (city) {
+    this.$store.dispatch('changeCity', city)
+    this.$router.push({
+      path: '/'
+    })
+  }
+}
+```
+
+继续看官网的数据流向图，可以知道此时数据来到了存储数据的仓库，此时的代码如下：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: '上海'
+  },
+  actions: {
+    //ctx参数代表上下文，与mutations进行通信，city是组件传递过来的数据
+    //commit（）方法的作用是将city数据传递给MchangeCity这个方法
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  }
+})
+```
+
+继续看官网的数据流向图，可以知道数据即将要来到最初始的位置，只要在这个位置将变动的代码传递给state即走完了整个流程，下面看具体代码：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: '上海'
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    //state代表了最开始存放的区域
+    MchangeCity (state, city) {
+      state.city = city
+    }
+  }
+})
+
+```
+
+虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage发挥作用的时候了！
 
 
 ### 项目难点
