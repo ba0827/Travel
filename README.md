@@ -215,6 +215,53 @@ export default {
 ```
 
 
+### 使用Vuex实现数据共享
+一般情况下，我们开发一个vue项目，都是使用组件化的方式来进行开发，使得项目更加容易管理和维护。虽然组件化开发有其优点，但是缺点也存在，比如组件与组件之间的数据联动以及管理，父子组件传值还好说，组件与组件的传值那就麻烦了，而且不容易进行数据开发和管理。于是在这种情况下，vuex出来了，我们可以先到[官方网站](https://vuex.vuejs.org/zh/)看vuex的具体介绍。<br>
+
+用大白话说就是vuex是一个公共数据存放仓库，其中的数据是和N个组件共享的，当在某个组件内改变了该数据，那么另一些与之关联的组件数据也会发生变化。下面来看具体的使用步骤：
+- 1、下载安装：npm install vuex --save
+- 2、创建一个存储数据的仓库，为了方便管理我们可以在src目录下创建一个store目录，然后在里面创建数据仓库文件index.js，具体代码如下：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: '北京'
+  }
+})
+
+```
+- 3、我们需要将该数据仓库import到main.js中使其成为全局能使用的API，具体代码如下：
+```
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import store from './store/index'
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})
+
+```
+- 4、由于我们在main.js将store这个玩意加载到了new Vue实例中，因此我们要在组件中调用数据仓库中存储的数据那就十分简单，下面看示例代码：
+```
+<div class="header-right">
+   {{this.$store.state.city}}
+   <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+```
+
+
 
 ### 项目难点
 1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
