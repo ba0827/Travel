@@ -332,7 +332,65 @@ export default new Vuex.Store({
 
 ```
 
-虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage发挥作用的时候了！
+虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage发挥作用的时候了！下面请看具体代码，简直太简单了：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: localStorage.city || '上海'
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+      localStorage.city = city
+    }
+  }
+})
+```
+
+为了避免用户将浏览器的本地存储关闭而导致的错误使网站奔溃，我们应该编写以下更加合理的代码：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+let defaultcity = '上海'
+try {
+  if (localStorage.city) {
+    defaultcity = localStorage.city
+  }
+} catch (e) {}
+
+export default new Vuex.Store({
+  state: {
+    city: defaultcity
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+      try {
+        localStorage.city = city
+      } catch (e) {}
+    }
+  }
+})
+
+```
 
 
 ### 项目难点
