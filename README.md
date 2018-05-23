@@ -392,6 +392,39 @@ export default new Vuex.Store({
 
 ```
 
+其实对于vuex数据的传递，我们还有一个简洁的方法，就是定义一个数组项来映射vuex中的数据，使HTML代码中调用数据的代码量减少，同时方便管理，下面看具体代码：
+```
+//{{this.$store.state.city}}变成了this.city
+<div class="header-right">
+   {{this.city}}
+   <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+
+<script>
+import { mspState } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState(['city'])
+  }
+}
+</script>
+
+//我们也能传递个对象过去
+//此时this.city就要变成this.currentCity了
+<script>
+import { mspState } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState({
+      currentCity: 'city'
+    })
+  }
+}
+</script>
+```
+
 
 ### 项目难点
 1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
