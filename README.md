@@ -263,7 +263,7 @@ new Vue({
 ```
 
 以上就是基础的vuex使用方式，下面我们需要实现的触发某事件，然后数据发生变化的操作，在开始看具体之前，先来琢磨一下官方给出的这张数据流向图：
-
+![](https://github.com/CruxF/Travel/blob/master/static/imgs/vuex.jpg)
 
 结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
 ```
