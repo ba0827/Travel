@@ -42,6 +42,9 @@ export default {
   },
   activated () {
     window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivated () {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -68,7 +71,6 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   height: $headerHeight;
   line-height: $headerHeight;
   text-align: center;
