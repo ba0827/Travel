@@ -215,6 +215,297 @@ export default {
 ```
 
 
+### 使用Vuex实现数据共享
+一般情况下，我们开发一个vue项目，都是使用组件化的方式来进行开发，使得项目更加容易管理和维护。虽然组件化开发有其优点，但是缺点也存在，比如组件与组件之间的数据联动以及管理，父子组件传值还好说，组件与组件的传值那就麻烦了，而且不容易进行数据开发和管理。于是在这种情况下，vuex出来了，我们可以先到[官方网站](https://vuex.vuejs.org/zh/)看vuex的具体介绍。<br>
+
+用大白话说就是vuex是一个公共数据存放仓库，其中的数据是和N个组件共享的，当在某个组件内改变了该数据，那么另一些与之关联的组件数据也会发生变化。下面来看基础的使用步骤：
+- 1、下载安装：npm install vuex --save
+- 2、创建一个存储数据的仓库，为了方便管理我们可以在src目录下创建一个store目录，然后在里面创建数据仓库文件index.js，具体代码如下：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // state为驱动应用的数据源
+  state: {
+    city: '北京'
+  }
+})
+
+```
+- 3、我们需要将该数据仓库import到main.js中使其成为全局能使用的API，具体代码如下：
+```
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import store from './store/index'
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})
+
+```
+- 4、由于我们在main.js将store这个玩意加载到了new Vue实例中，因此我们要在组件中调用数据仓库中存储的数据那就十分简单，下面看示例代码：
+```
+<div class="header-right">
+   {{this.$store.state.city}}
+   <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+```
+
+以上就是基础的vuex使用方式，下面我们需要实现的触发某事件，然后数据发生变化的操作，在开始看具体之前，先来琢磨一下官方给出的这张数据流向图：
+
+
+结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
+```
+//HTML代码，定义一个方法，在方法中派发一个changeCity事件，并传递参数
+<div class="title border-bottom">热门城市</div>
+<div class="button-list">
+  <div class="button-wrapper" v-for="item of hot" :key="item.id" @click="handleCityClick(item.name)">
+    <div class="button">{{item.name}}</div>
+  </div>
+</div>
+
+//Vue实例代码，通过dispatch派发成一个事件，并接收传值然后再传出去
+methods: {
+  handleCityClick (city) {
+    this.$store.dispatch('changeCity', city)
+    this.$router.push({
+      path: '/'
+    })
+  }
+}
+```
+
+继续看官网的数据流向图，可以知道此时数据来到了存储数据的仓库，此时的代码如下：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: '上海'
+  },
+  actions: {
+    //ctx参数代表上下文，与mutations进行通信，city是组件传递过来的数据
+    //commit（）方法的作用是将city数据传递给MchangeCity这个方法
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  }
+})
+```
+
+继续看官网的数据流向图，可以知道数据即将要来到最初始的位置，只要在这个位置将变动的代码传递给state即走完了整个流程，下面看具体代码：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: '上海'
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    //state代表了最开始存放的区域，即驱动应用的数据源
+    MchangeCity (state, city) {
+      state.city = city
+    }
+  }
+})
+
+```
+
+虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage大显神威的时候了！下面请看具体代码，简直太简单了：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    city: localStorage.city || '上海'
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+      localStorage.city = city
+    }
+  }
+})
+```
+
+为了避免用户将浏览器的本地存储关闭而导致的错误使网站奔溃，我们应该编写以下更加合理的代码（代码真有意思，呵呵呵~）：
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+let defaultcity = '上海'
+try {
+  if (localStorage.city) {
+    defaultcity = localStorage.city
+  }
+} catch (e) {}
+
+export default new Vuex.Store({
+  state: {
+    city: defaultcity
+  },
+  actions: {
+    changeCity (ctx, city) {
+      ctx.commit('MchangeCity', city)
+    }
+  },
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+      try {
+        localStorage.city = city
+      } catch (e) {}
+    }
+  }
+})
+
+```
+
+其实对于vuex数据的传递，我们还有一个简洁的方法，就是定义一个数组项来映射vuex中的数据，使HTML代码中调用数据的代码量减少，同时方便管理，下面看具体代码：
+```
+//{{this.$store.state.city}}变成了this.city
+<div class="header-right">
+   {{this.city}}
+   <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+
+<script>
+import { mspState } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState(['city'])
+  }
+}
+</script>
+
+//我们也能传递个对象过去
+//此时this.city就要变成this.currentCity了
+<script>
+import { mspState } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState({
+      currentCity: 'city'
+    })
+  }
+}
+</script>
+```
+
+以上是单个数据的传递简洁写法，下面是传递数据方法的简洁写法：
+```
+<script>
+import Bscroll from 'better-scroll'
+//import进来mapActions这个玩意，这点得好好思考下为什么要import进mapActions，而不是其他，比如mapMutations
+import { mapState, mapActions } from 'vuex'
+export default {
+  name: 'CityList',
+  props: {
+    hot: Array,
+    cities: Object,
+    letter: String
+  },
+  computed: {
+    ...mapState({
+      currentCity: 'city'
+    })
+  },
+  methods: {
+    handleCityClick (city) {
+      //直接使用这个方法传值，而不是this.$store.dispatch('changeCity', city)
+      this.changeCity(city)
+      this.$router.push({
+        path: '/'
+      })
+    },
+    //映射changeCity这个方法
+    ...mapActions(['changeCity'])
+  }
+}
+</script>
+```
+
+**Vuex中getters的作用以及用法** <br>
+
+getters这个对象有点类似计算属性computed，它能够实现将多个state区域中的属性值进行操作，具体看下面的代码：<br>
+
+首先定义好getters
+```
+//已经对state、actions和mutations这是三个区域的代码进行了封装
+import Vue from 'vue'
+import Vuex from 'vuex'
+import state from './state'
+import actions from './actions'
+import mutations from './mutations'
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: state,
+  actions: actions,
+  mutations: mutations,
+  //getters中派发一个doubleCity方法，事件从state区域获得两个数据对其进行操作（这两个数据可以相同，也可以不同）
+  getters: {
+    doubleCity (state) {
+      return state.city + ' ' + state.city
+    }
+  }
+})
+```
+接着在组件中使用派发出来的方法
+```
+HTML结构代码
+<div class="header-right">
+  {{this.doubleCity}}
+  <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+
+//vue实例代码
+<script>
+import { mapState, mapGetters } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState(['city']),
+    ...mapGetters(['doubleCity'])
+  }
+}
+</script>
+```
+
 
 ### 项目难点
 1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
