@@ -228,7 +228,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  // state为驱动应用的数据源
+  state: {
     city: '北京'
   }
 })
@@ -266,7 +267,7 @@ new Vue({
 
 结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
 ```
-//HTML代码，定义一个点击事件，并传递参数
+//HTML代码，定义一个方法，在方法中派发一个changeCity事件，并传递参数
 <div class="title border-bottom">热门城市</div>
 <div class="button-list">
   <div class="button-wrapper" v-for="item of hot" :key="item.id" @click="handleCityClick(item.name)">
@@ -323,7 +324,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    //state代表了最开始存放的区域
+    //state代表了最开始存放的区域，即驱动应用的数据源
     MchangeCity (state, city) {
       state.city = city
     }
@@ -332,7 +333,7 @@ export default new Vuex.Store({
 
 ```
 
-虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage发挥作用的时候了！下面请看具体代码，简直太简单了：
+虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage大显神威的时候了！下面请看具体代码，简直太简单了：
 ```
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -357,7 +358,7 @@ export default new Vuex.Store({
 })
 ```
 
-为了避免用户将浏览器的本地存储关闭而导致的错误使网站奔溃，我们应该编写以下更加合理的代码：
+为了避免用户将浏览器的本地存储关闭而导致的错误使网站奔溃，我们应该编写以下更加合理的代码（代码真有意思，呵呵呵~）：
 ```
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -429,7 +430,7 @@ export default {
 ```
 <script>
 import Bscroll from 'better-scroll'
-//import进来mapActions这个玩意
+//import进来mapActions这个玩意，这点得好好思考下为什么要import进mapActions，而不是其他，比如mapMutations
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'CityList',
@@ -458,6 +459,52 @@ export default {
 </script>
 ```
 
+**Vuex中getters的作用以及用法** <br>
+
+getters这个对象有点类似计算属性computed，它能够实现将多个state区域中的属性值进行操作，具体看下面的代码：<br>
+
+首先定义好getters
+```
+//已经对state、actions和mutations这是三个区域的代码进行了封装
+import Vue from 'vue'
+import Vuex from 'vuex'
+import state from './state'
+import actions from './actions'
+import mutations from './mutations'
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: state,
+  actions: actions,
+  mutations: mutations,
+  //getters中派发一个doubleCity方法，事件从state区域获得两个数据对其进行操作（这两个数据可以相同，也可以不同）
+  getters: {
+    doubleCity (state) {
+      return state.city + ' ' + state.city
+    }
+  }
+})
+```
+接着在组件中使用派发出来的方法
+```
+HTML结构代码
+<div class="header-right">
+  {{this.doubleCity}}
+  <span class="iconfont arrow-icon">&#xe64a;</span>
+</div>
+
+//vue实例代码
+<script>
+import { mapState, mapGetters } from 'vuex'
+export default {
+  name: 'HomeHeader',
+  computed: {
+    ...mapState(['city']),
+    ...mapGetters(['doubleCity'])
+  }
+}
+</script>
+```
 
 
 ### 项目难点
