@@ -889,7 +889,8 @@ watch: {
 最后就是一些HTML结构代码中的一些合理的判断显示，很简单，看源码就能明白，在这不说了。<br>
 
 
-4、滚动实现顶部区域的显示和隐藏，思路其实很简单，只要使用`document.documentElement.scrollTop`监听到页面滚动条的距离顶部的高度，然后执行一些if..else代码即可，下面是核心代码，定义opcity是为了实现页面渐现的一个过渡效果：
+4、滚动实现顶部区域的显示和隐藏<br>
+思路其实很简单，只要使用`document.documentElement.scrollTop`监听到页面滚动条的距离顶部的高度，然后执行一些if..else代码即可，下面是核心代码，定义opcity是为了实现页面渐现的一个过渡效果：
 ```
 handleScroll () {
   const top = document.documentElement.scrollTop
@@ -901,6 +902,41 @@ handleScroll () {
   } else {
     this.showAbs = true
   }
+}
+```
+
+
+5、对全局事件的解绑<br>
+这个玩意是我们十分容易忽视的，它在该项目出现的地方就是在“滚动实现顶部区域的显示和隐藏”这个功能上。由于在根组件上使用了keep-alive来提升网页的性能，因此我们能够定义一个钩子函数activated来触发某个事件，比如下面代码：
+```
+methods: {
+  handleScroll () {
+    const top = document.documentElement.scrollTop
+    if (top > 60) {
+      let opacity = top / 140
+      opacity = opacity > 1 ? 1 : opacity
+      this.opacityStyle = { opacity }
+      this.showAbs = false
+    } else {
+      this.showAbs = true
+    }
+  }
+},
+activated () {
+  window.addEventListener('scroll', this.handleScroll)
+}
+```
+在activated监听到页面发生滚动，然后触发了handleScroll ()这个方法。由于监听滚动事件是全局定义的，因此无论在哪个页面滚动，handleScroll()这个方法都会被触发，这个大家可以使用console.log测试一下。<br>
+
+那么我该如何解决这个问题呢？很简单，只要这么写即可：
+```
+//在页面显示的时候该生命周期启动（官方：keep-alive 组件激活时调用）
+activated () {
+    window.addEventListener('scroll', this.handleScroll)
+},
+//在该页面即将消失的时候，该生命周期启动，将监听scroll的事件解绑
+deactivated () {
+  window.removeEventListener('scroll', this.handleScroll)
 }
 ```
 
