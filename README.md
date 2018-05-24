@@ -596,6 +596,54 @@ export default {
 ```
 
 
+### 动态路由的配置
+- 1、首先添加一个路由跳转，传入动态参数。在路由跳转中，可以设置tag值，让router-link等于任何一个标签，请看下面的核心代码
+```
+<router-link
+  tag="li"
+  class="item border-bottom"
+  v-for="item of list"
+  :key="item.id"
+  :to="'/detail/' + item.id"
+>
+  <img class="item-img" :src="item.imgUrl" />
+  <div class="item-info">
+    <p class="item-title">{{item.title}}</p>
+    <p class="item-desc">{{item.desc}}</p>
+    <button class="item-button">查看详情</button>
+   </div>
+</router-link>
+```
+- 2、配置好路由跳转页面以及设置一个参数，核心代码如下：
+```
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from '@/pages/home/Home'
+import City from '@/pages/city/City'
+import Detail from '@/pages/detail/Detail'
+
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    }, {
+      path: '/city',
+      name: 'City',
+      component: City
+    }, {
+      path: '/detail/:id',
+      name: 'Detail',
+      component: Detail
+    }
+  ]
+})
+
+```
+
 
 ### 项目难点
 1、在城市列表实现点击右侧A-Z字母，右侧内容滚动到相应的位置。<br>
