@@ -889,7 +889,20 @@ watch: {
 最后就是一些HTML结构代码中的一些合理的判断显示，很简单，看源码就能明白，在这不说了。<br>
 
 
-4、滚动实现顶部区域的显示和隐藏
+4、滚动实现顶部区域的显示和隐藏，思路其实很简单，只要使用`document.documentElement.scrollTop`监听到页面滚动条的距离顶部的高度，然后执行一些if..else代码即可，下面是核心代码，定义opcity是为了实现页面渐现的一个过渡效果：
+```
+handleScroll () {
+  const top = document.documentElement.scrollTop
+  if (top > 60) {
+    let opacity = top / 140
+    opacity = opacity > 1 ? 1 : opacity
+    this.opacityStyle = { opacity }
+    this.showAbs = false
+  } else {
+    this.showAbs = true
+  }
+}
+```
 
 
 
