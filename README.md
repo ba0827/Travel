@@ -934,7 +934,7 @@ activated () {
 activated () {
     window.addEventListener('scroll', this.handleScroll)
 },
-//在该页面即将消失的时候，该生命周期启动，将监听scroll的事件解绑
+//在该页面即将消失的时候，该生命周期启动（官方：keep-alive 组件停用时调用），将监听scroll的事件解绑
 deactivated () {
   window.removeEventListener('scroll', this.handleScroll)
 }
