@@ -596,6 +596,12 @@ export default {
 ```
 
 
+### 封装公共组件的基本思想
+需要把某个组件独立的进行封装，那么有一个前提，那就是这个组件是在其他组件中经常性用到的，在这个项目中，大家可以看一下[Gallary.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/common/gallary/Gallary.vue)和[Banner.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/pages/detail/components/Banner.vue)这两个组件，仔细领会一下封装公共组件的内涵所在。
+
+
+
+
 ### 动态路由的配置
 - 1、首先添加一个路由跳转，传入动态参数。在路由跳转中，可以设置tag值，让router-link等于任何一个标签，请看下面的核心代码
 ```
