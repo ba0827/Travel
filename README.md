@@ -263,7 +263,7 @@ new Vue({
 ```
 
 以上就是基础的vuex使用方式，下面我们需要实现的触发某事件，然后数据发生变化的操作，在开始看具体之前，先来琢磨一下官方给出的这张数据流向图：
-
+![](https://github.com/CruxF/Travel/blob/master/static/imgs/vuex.jpg)
 
 结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
 ```
@@ -505,6 +505,96 @@ export default {
 }
 </script>
 ```
+
+以上关于Vuex的内容整理几乎都是大白话式的，为了更好的深入理解和学习Vuex，请立刻前来[官方网站](https://vuex.vuejs.org/zh/)<br>
+
+
+### 使用keep-alive优化网页性能
+在一开始的代码中，每当页面刷新或者从另一页面返回到其他页面时，都会发送一次ajax请求，而每次请求回来的数据又是同样的（为了观察这个问题可以打开Chrome浏览器，F12，然后在Network中点击XHR查看浏览器加载进来的数据），所以这就造成了不必要的网络流量以及网页性能上的开支。为了解决这个问题，我们需要使用keep-alive这个关键标签。<br>
+
+使用keep-alive提高网页的方法十分简单，只要在根组件这么来就可以了：
+```
+<template>
+  <div id="app">
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
+<style>
+
+</style>
+
+```
+以上代码的意思就是通过router-view展示出来的数据只需要从后台调用一次就够了，因为keep-alive这个标签，它有将请求过来的数据保存在本地的作用，以后每次页面调用同样的数据时，都会优先调用本地的。<br>
+
+但是这么写的话，问题又来了，假如我们改变了数据，但是页面还是从本地获取旧的数据，那事情就大条了。说的可能有些抽象，打个比方吧：我们在城市搜索列表页选择了一个城市，然后跳转到了首页，其实这个时候首页的下方应该根据选择城市的不同而显示不同推荐内容，但是使用keep-alive将后台数据在本地存储了，那么调用的也是没有发生变化的数据。这该怎么办呢？此时就轮到activated这个生命周期函数发挥功效的时候了，看官网介绍：**activated是keep-alive 组件激活时调用。** 下面我们看看具体代码：
+```
+import axios from 'axios'
+//1、首先导入vuex中中辅助函数mapState，记得vuex中v是小写而不是大写，不然会报Warnings
+import { mapState } from 'vuex'
+export default {
+  name: 'Home',
+  components: {
+    HomeHeader,
+    HomeSwiper,
+    HomeIcons,
+    HomeRecommend,
+    HomeWeekend
+  },
+  data () {
+    return {
+      //2、定义一个第三方变量
+      lastCity: '',
+      swiperList: [],
+      iconList: [],
+      recommendList: [],
+      weekendList: []
+    }
+  },
+  //3、使用辅助函数mapState
+  computed: {
+    ...mapState(['city'])
+  },
+  methods: {
+    getHomeInfo () {
+      //4、在本次调用中无关紧要，只是我们能够在Network查看到当前的city值是什么
+      axios.get('/api/index.json?city=' + this.city).then(this.getHomeInfoSucc)
+    },
+    getHomeInfoSucc (res) {
+      res = res.data
+      if (res.ret && res.data) {
+        const data = res.data
+        this.swiperList = data.swiperList
+        this.iconList = data.iconList
+        this.recommendList = data.recommendList
+        this.weekendList = data.weekendList
+      }
+    }
+  },
+  //5、将当前的city值赋值给lastCity
+  mounted () {
+    this.lastCity = this.city
+    this.getHomeInfo()
+  },
+  //6、借助在keep-live状态中，mounted()只加载一次的特点
+  //我们可以通过判断改变后的值与原来的值是否相等，然后再决定是否再一次调用后台数据接口
+  activated () {
+    if (this.lastCity !== this.city) {
+      this.lastCity = this.city
+      this.getHomeInfo()
+    }
+  }
+}
+```
+
 
 
 ### 项目难点
