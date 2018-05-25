@@ -1170,7 +1170,18 @@ proxyTable: {
 - 步骤二：更改package.json的dev配置，代码如下：
 `"dev": "webpack-dev-server --host 0.0.0.0 --inline --progress --config build/webpack.dev.conf.js"`
 - 步骤三：然后重启下npm run dev，使用这种方式查看运行效果 `IP地址:8080`
-- 步骤四：
+- 步骤四：将地址复制到草料二维码的官方网站生成二维码
+- 用微信扫一扫（假如微信扫不了的话，下载一个二维码扫描来扫描）
+- 注意：需要在同一个局域网内，手机才能访问成功
+
+假如手机浏览出现白屏的话，可能该手机不支持promise这个属性，为了解决这个问题，需要安装一个包：<br>
+`npm install babel-polyfill --save`
+
+接着在main.js中导入babel-polyfill这个插件`import 'babel-polyfill'`<br>
+
+
+### Vue项目打包上线
+使用命令`npm run build`打包项目，将生成的dist这个文件夹给后台的同学，让他们放到服务器空间里面即可。
 
 
 ### 有用的网站
