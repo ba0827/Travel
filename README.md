@@ -131,7 +131,7 @@ resolve: {
 在vue项目中发送ajax请求的工具有以下两种：
 - vue-resource
 - axios
-- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。<br>
+- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求，[点击查看更加详细的信息](https://www.cnblogs.com/xiaohuochai/p/7628756.html)<br>
 
 
 
@@ -597,9 +597,87 @@ export default {
 
 
 ### 封装公共组件的基本思想
-需要把某个组件独立的进行封装，那么有一个前提，那就是这个组件是在其他组件中经常性用到的，在这个项目中，大家可以看一下[Gallary.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/common/gallary/Gallary.vue)和[Banner.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/pages/detail/components/Banner.vue)这两个组件，仔细领会一下封装公共组件的内涵所在。
+需要把某个组件独立的进行封装，那么有一个前提，那就是这个组件是在其他组件中经常性用到的，在这个项目中，大家可以看一下[Gallary.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/common/gallary/Gallary.vue)和[Banner.vue](https://github.com/CruxF/Travel/blob/detail-banner/src/pages/detail/components/Banner.vue)这两个组件，仔细领会一下封装公共组件的精髓所在。<br>
 
 
+### 使用递归组件
+递归函数相信大家都曾经听说过，就是这个函数自身调用自身。那么递归组件的意思也是一样的，就是组件调用组件自身，由于代码量不是很多，下面贴出全部代码：<br>
+父组件：
+```
+<template>
+  <div>
+    <detail-banner></detail-banner>
+    <detail-header></detail-header>
+    <div class="content">
+      <detail-list :list="list"></detail-list>
+    </div>
+  </div>
+</template>
+
+<script>
+import DetailBanner from './components/Banner'
+import DetailHeader from './components/Header'
+import DetailList from './components/List'
+export default {
+  name: 'Detail',
+  components: {
+    DetailBanner,
+    DetailHeader,
+    DetailList
+  },
+  data () {
+    return {
+      list: [{
+        title: '成人票',
+        children: [{
+          title: '成人三馆联票',
+          children: [{
+            title: '成人三馆联票的小分队1'
+          }, {
+            title: '成人三馆联票的小分队2'
+          }]
+        }, {
+          title: '成人五馆联票'
+        }]
+      }, {
+        title: '儿童票'
+      }, {
+        title: '特惠票'
+      }]
+    }
+  }
+}
+</script>
+```
+以上代码着重留意detail-list这个子组件，以及向它传递的数据信息。下面我们来看子组件的代码
+```
+<template>
+  <div class="list">
+    <div
+      class="item"
+      v-for="(item, index) of list"
+      :key="index"
+    >
+      <div class="item-title border-bottom">
+        <span class="item-title-icon"></span>
+        {{item.title}}
+      </div>
+      <div v-if="item.children" class="item-children">
+        <detail-list :list="item.children"></detail-list>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DetailList',
+  props: {
+    list: Array
+  }
+}
+</script>
+```
 
 
 ### 动态路由的配置
