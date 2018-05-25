@@ -131,7 +131,7 @@ resolve: {
 在vue项目中发送ajax请求的工具有以下两种：
 - vue-resource
 - axios
-- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求。<br>
+- 那么为什么最后官方推荐使用axios来作为发送ajax请求的工具呢？因为axios十分的强大，可以实现跨平台的数据请求，比如axios在浏览器端可以发送XHR的请求，在node服务端上又可以发送http请求，[点击查看更加详细的信息](https://www.cnblogs.com/xiaohuochai/p/7628756.html)<br>
 
 
 
