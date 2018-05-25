@@ -1055,6 +1055,90 @@ export default new Router({
 
 ```
 
+6、开发一个公共的动画组件
+在Vue项目中，要想为某个组件或者某个div区域增加一个公共的动画效果，只有一个前提，那就是只要组件或者div区域能够被隐藏或者显示即可，也就是其中含有v-if或者v-show指令，然后通过插槽（slot）的方式使用公共的动画组件，下面来看具体的代码：
+```
+//公共动画组件
+<template>
+  <transition>
+    <slot></slot>
+  </transition>
+</template>
+
+<script>
+export default {
+  name: 'FadeAnimation'
+}
+</script>
+
+<style lang="stylus" scoped="scoped">
+.v-enter, .v-leave-to {
+  opacity: 0;
+}
+.v-enter-active, .v-leave-active {
+  transition: opacity 1s;
+}
+</style>
+
+
+//调用公共动画组件的组件
+<template>
+  <div>
+    <div class="banner" @click="handleBannerClick">
+      <img :src="bannerImg" />
+      <div class="banner-info">
+        <div class="banner-title">
+          {{this.sightName}}
+        </div>
+        <div class="banner-number">
+          <span class="iconfont banner-icon">&#xe63b;</span>
+          {{this.bannerImgs.length}}
+        </div>
+      </div>
+    </div>
+    <fade-animation>
+      <common-gallary
+        :imgs="bannerImgs"
+        v-show="showGallary"
+        @close="handleGallaryClose"
+      >
+      </common-gallary>
+    </fade-animation>
+  </div>
+</template>
+
+<script>
+import CommonGallary from 'common/gallary/Gallary'
+import FadeAnimation from 'common/fade/FadeAnimation'
+export default {
+  name: 'DetailBanner',
+  props: {
+    sightName: String,
+    bannerImg: String,
+    bannerImgs: Array
+  },
+  data () {
+    return {
+      showGallary: false
+    }
+  },
+  methods: {
+    handleBannerClick () {
+      this.showGallary = true
+    },
+    handleGallaryClose () {
+      this.showGallary = false
+    }
+  },
+  components: {
+    CommonGallary,
+    FadeAnimation
+  }
+}
+</script>
+```
+是不是很神奇，很方便，很简洁？？！要是对插槽（slot）的知识有点遗忘的话，那么[请来这里](https://github.com/CruxF/Vue-base/issues/1)，记得先安装gayhub插件进行观赏。
+
 
 ### 有用的网站
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
