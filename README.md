@@ -1165,4 +1165,7 @@ iconfont.css是全局样式，如何去使用前面有提到。在项目中是�
 
 ```
 下载：git clone git@github.com:CruxF/Travel.git
+进入项目：cd Travel
+安装依赖包：npm install
+运行项目：npm run dev
 ```
