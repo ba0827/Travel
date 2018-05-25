@@ -915,7 +915,7 @@ handleTouchMove(e) {
   }
 }
 ```
-好了，这块的功能完美实现了！
+好了，这块的功能完美实现了！<br>
 
 
 3、实现搜索数据并显示结果的功能<br>
@@ -1018,6 +1018,42 @@ deactivated () {
 }
 ```
 
+
+5、解决在滚动的时候路由跳转页面不在最上方显示的问题
+这应该不算是项目难点，只是技术盲点。这个问题的具体场景是这样的：在A组件滚动，滚动到某个地方，然后点击某个区域，跳转到了B组件，按照正常情况下，B组件的内容应该是正常从最上方开始显示，然而此时B组件的内容却在A组件滚动到的那个位置进行显示。<br>
+
+那么，该如何解决这个问题呢？很简单，只要在配置路由跳转的文件中加入一条规则即可，具体请看下面的代码：
+```
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from '@/pages/home/Home'
+import City from '@/pages/city/City'
+import Detail from '@/pages/detail/Detail'
+
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    }, {
+      path: '/city',
+      name: 'City',
+      component: City
+    }, {
+      path: '/detail/:id',
+      name: 'Detail',
+      component: Detail
+    }
+  ],
+  scrollBehavior (to, from, savePostion) {
+    return { x: 0, y: 0 }
+  }
+})
+
+```
 
 
 ### 有用的网站
