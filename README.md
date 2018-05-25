@@ -1137,7 +1137,40 @@ export default {
 }
 </script>
 ```
-是不是很神奇，很方便，很简洁？？！要是对插槽（slot）的知识有点遗忘的话，那么[请来这里](https://github.com/CruxF/Vue-base/issues/1)，记得先安装gayhub插件进行观赏。
+是不是很神奇，很方便，很简洁？？！要是对插槽（slot）的知识有点遗忘的话，那么[请来这里](https://github.com/CruxF/Vue-base/issues/1)，记得先安装gayhub插件进行观赏。<br>
+
+
+### Vue项目的接口联调
+当后台接口开发好的时候，我们需要将本地mock的数据删除，然后从后台地址将数据获取。那么，具体的我们该如何做呢？其实很简单，只要将config文件夹的index.js中改变数据转发地址即可，请看下面的代码：
+```
+//axios请求地址
+getDetailInfo () {
+  axios.get('/api/detail.json', {
+    params: {
+      id: this.$route.params.id
+    }
+  }).then(this.handleGetDataSucc)
+}
+
+//index.js文件中改变以/api开头的目标地址，指向接口地址
+// Paths
+assetsSubDirectory: 'static',
+assetsPublicPath: '/',
+proxyTable: {
+  '/api': {
+     target: '服务器接口地址'
+    }
+}
+```
+
+
+### 真机测试Vue项目
+
+- 步骤一：获取本地IP地址。windows下的获取方式  cmd ——> ipconfig
+- 步骤二：更改package.json的dev配置，代码如下：
+`"dev": "webpack-dev-server --host 0.0.0.0 --inline --progress --config build/webpack.dev.conf.js"`
+- 步骤三：然后重启下npm run dev，使用这种方式查看运行效果 `IP地址:8080`
+- 步骤四：
 
 
 ### 有用的网站
