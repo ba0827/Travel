@@ -218,10 +218,11 @@ axios({
   console.log('访问退出登录接口失败')
 })
 ```
-为此我们可以在config文件夹下的index.js文件中这么来写
+为此我们可以在config文件夹下的index.js文件中这么来写（需要后台的同学将域名映射，并且连接了同一条网线）
 ```
 proxyTable: {
   '/api': {
+    target: 'http://同事电脑ip地址:80',
     pathRewrite: {
       '^/api': 'http://11191fd8.ngrok.io'
     }
