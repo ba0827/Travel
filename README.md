@@ -222,7 +222,7 @@ axios({
 ```
 proxyTable: {
   '/api': {
-    target: 'http://同事电脑ip地址:80',
+    target: 'http://同事电脑ip地址:80',(连了相同的wifi这个不用设置，奇奇怪怪的)
     pathRewrite: {
       '^/api': 'http://11191fd8.ngrok.io'
     }
