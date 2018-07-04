@@ -199,6 +199,53 @@ export default {
 </script>
 ```
 
+再举一个栗子
+比如后台的小朋友很好很贴心，设置了静态域名，能让你避免跨域请求的烦恼，然而有个问题的就是这个静态域名每次在服务器重启的时候都会改变，如果我们用下面的写法，当域名发生改变时，很多页面的url地址都要改变，这样一个个去修改太麻烦了
+```
+axios({
+  method: 'get',
+  url: 'http://11191fd8.ngrok.io/huinongloan2/web/loaner/loanerLogout',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then(function(res) {
+  console.log('访问退出登录接口成功')
+  if(res.data.code == 0) {
+    sessionStorage.removeItem('loanerInfo')
+    self.isLogin = false
+  }
+}).catch(function(error) {
+  console.log('访问退出登录接口失败')
+})
+```
+为此我们可以在config文件夹下的index.js文件中这么来写
+```
+proxyTable: {
+  '/api': {
+    pathRewrite: {
+      '^/api': 'http://11191fd8.ngrok.io'
+    }
+  }
+}
+```
+最后所有的页面这么来写就行了，是不是轻松了很多？
+```
+axios({
+  method: 'get',
+  url: '/api/huinongloan2/web/loaner/loanerLogout',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then(function(res) {
+  console.log('访问退出登录接口成功')
+  if(res.data.code == 0) {
+    sessionStorage.removeItem('loanerInfo')
+    self.isLogin = false
+  }
+}).catch(function(error) {
+  console.log('访问退出登录接口失败')
+})
+```
 
 
 ### Better-scroll的使用及字母表布局
