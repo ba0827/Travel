@@ -571,6 +571,84 @@ export default {
 </script>
 ```
 
+通过这种方式，我们能够管理多个数据，下面请看具体代码
+```
+<template>
+  <div class="apply">
+    <p class="p2">{{this.xphone}}</p>
+    <p class="p2">{{this.xname}}</p>
+  </div>
+</template>
+<script>
+  import { mapState, mapActions } from 'vuex'
+  export default {
+    name: 'Apply',
+    data() {
+      return {
+        phone: ''
+      }
+    },
+    created() {
+      this.$nextTick(function() {
+        this.getloanerInfo()
+      })
+    },
+    computed: {
+      ...mapState({
+        xphone: 'Lphone',
+        xname: 'Lname'
+      })
+    },
+    methods: {
+      // 判断用户是否登录
+      getloanerInfo() {
+        let loanerInfo = sessionStorage.getItem('loanerInfo')
+        if(loanerInfo) {
+          let loanerInfoParse = JSON.parse(loanerInfo)
+          let phone = loanerInfoParse.loanerPhone
+          let loanerName = loanerInfoParse.loanerName
+          this.phone = phone
+          // 接收手机号码和用户姓名到vuex中
+          this.loanerPh(phone)
+          this.loanerNa(loanerName)
+        } else {
+          this.isLogin = false
+        }
+      },
+      ...mapActions(['loanerPh', 'loanerNa'])
+    }
+  }
+</script>
+<style lang="stylus" scoped="scoped"></style>
+
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
+export default new Vuex.Store({
+  state: {
+    Lphone: '',
+    Lname: ''
+  },
+  actions: {
+    loanerPh(ctx, info) {
+      ctx.commit('getPhone', info)
+    },
+    loanerNa(ctx, name) {
+      ctx.commit('getName', name)
+    }
+  },
+  mutations: {
+    getPhone(state, info) {
+      state.Lphone = info
+    },
+    getName(state, name) {
+      state.Lname = name
+    }
+  }
+})
+```
+
 **Vuex中getters的作用以及用法** <br>
 
 getters这个对象有点类似计算属性computed，它能够实现将多个state区域中的属性值进行操作，具体看下面的代码：<br>
