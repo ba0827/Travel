@@ -475,6 +475,69 @@ export default {
 </script>
 ```
 
+在项目开发中，完整的代码可能是这样的，...mapState的作用不过是将在store保存好的数据返回而已。
+```
+<template>
+  <div class="apply">
+    <p class="p2">{{this.Lphone}}</p>
+  </div>
+</template>
+
+<script>
+  import axios from 'axios'
+  import { mapState } from 'vuex'
+  export default {
+    name: 'Apply',
+    data() {
+      return {
+        phone: ''
+      }
+    },
+    created() {
+      this.$nextTick(function() {
+        this.getloanerInfo()
+      })
+    },
+    computed: {
+      ...mapState(['Lphone'])
+    },
+    methods: {
+      // 判断用户是否登录
+      getloanerInfo() {
+        let loanerInfo = sessionStorage.getItem('loanerInfo')
+        if(loanerInfo) {
+          let loanerInfoParse = JSON.parse(loanerInfo)
+          let phone = loanerInfoParse.loanerPhone
+          this.phone = phone
+          this.$store.dispatch('loaner', this.phone)
+        }
+      }
+    }
+  }
+</script>
+<style lang="stylus" scoped="scoped"></style>
+
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
+export default new Vuex.Store({
+  state: {
+    Lphone: ''
+  },
+  actions: {
+    loaner(ctx, info) {
+      ctx.commit('getLoaner', info)
+    }
+  },
+  mutations: {
+    getLoaner(state, info) {
+      state.Lphone = info
+    }
+  }
+})
+```
+
 以上是单个数据的传递简洁写法，下面是传递数据方法的简洁写法：
 ```
 <script>
