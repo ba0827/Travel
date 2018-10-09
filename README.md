@@ -18,7 +18,7 @@
 `<div class="border-bottom">当前城市</div> `<br>
 
 假如要修改1px边框的颜色或者其他样式，我们可以这么来做：<br>
-```
+```css
 .border-bottom:before {
   border-color: #777;
 }
@@ -47,12 +47,12 @@
 
 ### 提高项目的维护性
 我们可以将一些经常通用的属性值放在一个样式表中，然后组件导入，直接传变量值就好了，这样就能实现修改一处而改变多处。比如我们可以定义一个公共样式文件，在里面用一个变量存放经常要用到的单独样式，示例代码如下：
-```
-variables.styl文件中定义
+```css
+// variables.styl文件中定义
 $bgColor = #00bcd4
 $darkTextColor = #333
 
-Header.vue文件中使用
+// Header.vue文件中使用
 <style lang="stylus" scoped="scoped">
 @import '~styles/variables.styl'
 .header {
@@ -65,15 +65,15 @@ Header.vue文件中使用
 ```
 
 除了定义变量来存放经常要用到的单独样式，我们还能定义方法来存放一组要经常用到的样式，示例代码如下：
-```
-variables.styl文件中定义
+```css
+// variables.styl文件中定义
 ellipsis(){
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-Header.vue文件中使用
+// Header.vue文件中使用
 <style lang="stylus" scoped="scoped">
 @import '~styles/variables.styl'
 .icon-desc {
@@ -96,7 +96,7 @@ Header.vue文件中使用
 在项目开发之中，可能我们会写很多又长又臭的路径名，这是十分不优雅且麻烦的。比如这样的：`import '../../../assets/styles/iconfont.css'`，还有这样的：`@import '../../../assets/styles/variables.styl'`，那么在vue-cli项目中我们就可以使用一些别名来代替，比如能这么写：`import '@/assets/styles/iconfont.css'`，还能这么写：`@import '~@/assets/styles/variables.styl'`，需要注意的是在导入一个css文件到另一个css文件中，@符号前面要加个波浪线，此时这里的@代表的是整个src目录。<br>
 
 我们还能自己来定义各种文件名的别名，修改地址是build——>webpack.base.conf.js，具体改动地方看下面的代码：
-```
+```js
 resolve: {
   extensions: ['.js', '.vue', '.json'],
   alias: {
@@ -140,7 +140,7 @@ resolve: {
 - 安装aixos：`npm install axios --save`
 - 在单个组件中导入它：`import axios from 'axios'`
 - 来看看一个简单的代码实例：
-```
+```js
 import axios from 'axios'
 export default {
   name: 'Home',
@@ -161,7 +161,7 @@ export default {
 不过以上代码有个问题就是ajax请求的只是本地的数据，如果要请求服务器的数据，也就是项目需要上线前，那么该做哪些工作呢？
 - 首先请求地址修改为后台接口地址，比如`axios.get('/api/index.json').then(this.getHomeInfoSucc)`；
 - 转发地址，即我们请求后台接口地址的时候，成功后会将该地址转换成本地的地址进行测试，具体代码如下：
-```
+```js
 proxyTable: {
    '/api': {
      target: 'http://localhost:8080',
@@ -173,7 +173,7 @@ proxyTable: {
 ```
 以上代码的位置在vue-cli项目中的config文件夹下的index.js文件中。它的含义是：当页面请求后台地址是api目录的下面时，那么就将请求转移到本地端口为8080的本地服务器，并且请求地址是以api为开头时，就将地址转换成/statick/mock。这个转发地址的功能是由webpack中webpack-dev-server这个工具提供的。
 - 最后当我以下面这段代码去请求数据的时候也能够成功
-```
+```js
 import axios from 'axios'
 export default {
   name: 'Home',
@@ -201,7 +201,7 @@ export default {
 
 再举一个栗子
 比如后台的小朋友很好很贴心，设置了静态域名，能让你避免跨域请求的烦恼，然而有个问题的就是这个静态域名每次在服务器重启的时候都会改变，如果我们用下面的写法，当域名发生改变时，很多页面的url地址都要改变，这样一个个去修改太麻烦了
-```
+```js
 axios({
   method: 'get',
   url: 'http://11191fd8.ngrok.io/huinongloan2/web/loaner/loanerLogout',
@@ -219,7 +219,7 @@ axios({
 })
 ```
 为此我们可以在config文件夹下的index.js文件中这么来写（需要后台的同学将域名映射，并且连接了同一条网线）
-```
+```js
 proxyTable: {
   '/api': {
     target: 'http://同事电脑ip地址:80',(连了相同的wifi这个不用设置，奇奇怪怪的)
@@ -230,7 +230,7 @@ proxyTable: {
 }
 ```
 最后所有的页面这么来写就行了，是不是轻松了很多？
-```
+```js
 axios({
   method: 'get',
   url: '/api/huinongloan2/web/loaner/loanerLogout',
@@ -253,7 +253,7 @@ axios({
 有时候我们开发项目的时候，会有类似与手机联系人浏览模式的需求，也就是向下滚动内容的需求。开发这种需求，我们往往会使用一个插件，叫做————[better-scroll](https://github.com/ustbhuangyi/better-scroll)，国人自主开发移动端（现已支持 PC 端）各种滚动场景需求的插件，文档十分全面，很容易就能入手，下面我们开始正式使用它：
 - 下载安装：`npm install better-scroll --save`
 - 根据官网的“起步”介绍，我们知道首先得需要一个符合标准的HTML结构（具体去看[官方介绍](https://github.com/ustbhuangyi/better-scroll)），我们需要做的就是做灵活的变动，比如获取DOM数据那块，我们开发该项目是基于Vue的，于是可以根据关键字ref获取到html结构的DOM，具体变动看下面代码：
-```
+```js
 import Bscroll from 'better-scroll'
 export default {
   name: 'CityList',
@@ -270,7 +270,7 @@ export default {
 用大白话说就是vuex是一个公共数据存放仓库，其中的数据是和N个组件共享的，当在某个组件内改变了该数据，那么另一些与之关联的组件数据也会发生变化。下面来看基础的使用步骤：
 - 1、下载安装：npm install vuex --save
 - 2、创建一个存储数据的仓库，为了方便管理我们可以在src目录下创建一个store目录，然后在里面创建数据仓库文件index.js，具体代码如下：
-```
+```js
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -285,7 +285,7 @@ export default new Vuex.Store({
 
 ```
 - 3、我们需要将该数据仓库import到main.js中使其成为全局能使用的API，具体代码如下：
-```
+```js
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -304,7 +304,7 @@ new Vue({
 
 ```
 - 4、由于我们在main.js将store这个玩意加载到了new Vue实例中，因此我们要在组件中调用数据仓库中存储的数据那就十分简单，下面看示例代码：
-```
+```html
 <div class="header-right">
    {{this.$store.state.city}}
    <span class="iconfont arrow-icon">&#xe64a;</span>
@@ -315,7 +315,7 @@ new Vue({
 ![](https://github.com/CruxF/Travel/blob/master/static/imgs/vuex.jpg)
 
 结合这张图我们可知在组件中的数据是通过`dispatch`这个方法传递出去，核心代码实现如下：
-```
+```js
 //HTML代码，定义一个方法，在方法中派发一个changeCity事件，并传递参数
 <div class="title border-bottom">热门城市</div>
 <div class="button-list">
@@ -336,7 +336,7 @@ methods: {
 ```
 
 继续看官网的数据流向图，可以知道此时数据来到了存储数据的仓库，此时的代码如下：
-```
+```js
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -357,7 +357,7 @@ export default new Vuex.Store({
 ```
 
 继续看官网的数据流向图，可以知道数据即将要来到最初始的位置，只要在这个位置将变动的代码传递给state即走完了整个流程，下面看具体代码：
-```
+```js
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -383,7 +383,7 @@ export default new Vuex.Store({
 ```
 
 虽然以上就是完整的实现了组件之间数据联动的功能，但是事情还没结束呢，因为刷新页面时，数据还是会变回state中最初始的值，那么该怎么办呢？此时，就到了HTML5中的localstorage大显神威的时候了！下面请看具体代码，简直太简单了：
-```
+```js
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -408,7 +408,7 @@ export default new Vuex.Store({
 ```
 
 为了避免用户将浏览器的本地存储关闭而导致的错误使网站奔溃，我们应该编写以下更加合理的代码（代码真有意思，呵呵呵~）：
-```
+```js
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -443,7 +443,7 @@ export default new Vuex.Store({
 ```
 
 其实对于vuex数据的传递，我们还有一个简洁的方法，就是定义一个数组项来映射vuex中的数据，使HTML代码中调用数据的代码量减少，同时方便管理，下面看具体代码：
-```
+```html
 //{{this.$store.state.city}}变成了this.city
 <div class="header-right">
    {{this.city}}
@@ -476,7 +476,7 @@ export default {
 ```
 
 在项目开发中，完整的代码可能是这样的，...mapState的作用不过是将在store保存好的数据返回而已。
-```
+```html
 <template>
   <div class="apply">
     <p class="p2">{{this.Lphone}}</p>
@@ -539,7 +539,7 @@ export default new Vuex.Store({
 ```
 
 以上是单个数据的传递简洁写法，下面是传递数据方法的简洁写法：
-```
+```html
 <script>
 import Bscroll from 'better-scroll'
 //import进来mapActions这个玩意，这点得好好思考下为什么要import进mapActions，而不是其他，比如mapMutations
@@ -572,7 +572,7 @@ export default {
 ```
 
 通过这种方式，我们能够管理多个数据，下面请看具体代码
-```
+```html
 <template>
   <div class="apply">
     <p class="p2">{{this.xphone}}</p>
@@ -654,7 +654,7 @@ export default new Vuex.Store({
 getters这个对象有点类似计算属性computed，它能够实现将多个state区域中的属性值进行操作，具体看下面的代码：<br>
 
 首先定义好getters
-```
+```js
 //已经对state、actions和mutations这是三个区域的代码进行了封装
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -676,14 +676,14 @@ export default new Vuex.Store({
 })
 ```
 接着在组件中使用派发出来的方法
-```
-HTML结构代码
+```html
+// HTML结构代码
 <div class="header-right">
   {{this.doubleCity}}
   <span class="iconfont arrow-icon">&#xe64a;</span>
 </div>
 
-//vue实例代码
+// vue实例代码
 <script>
 import { mapState, mapGetters } from 'vuex'
 export default {
