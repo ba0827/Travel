@@ -696,6 +696,28 @@ export default {
 </script>
 ```
 
+
+**Vuex中跳过actions的用法** <br>
+我们在应用vuex的时候还可以将actions这个步骤直接忽略掉，使代码变得更加简洁
+```js
+// 组件代码
+let status = sessionStorage.getItem("systemStatus");
+this.$store.commit('systemSta', status);
+
+// vuex文件代码
+state: {
+  systemStatus: ""
+},
+mutations: {
+  systemSta(state, value) {
+    state.systemStatus = value;
+  }
+}
+
+// 另一个组件代码
+let status = this.$store.state.systemStatus;
+```
+
 以上关于Vuex的内容整理几乎都是大白话式的，为了更好的深入理解和学习Vuex，请立刻前来[官方网站](https://vuex.vuejs.org/zh/)<br>
 
 
