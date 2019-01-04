@@ -1396,11 +1396,11 @@ proxyTable: {
 使用命令`npm run build`打包项目，将生成的dist这个文件夹给后台的同学，让他们放到服务器空间里面即可。
 
 
-### 有用的网站
+### 定制的个性化的icon图标
 1、能够定制和收藏属于自己的icon网站，[传送门](http://www.iconfont.cn)在此。我们可以在每次开发一个项目的时候都在里面收集一些icon，并为这些icon创建一个相应的仓库。<br>
 
 **使用方式** <br>
-icon新建一个项目，在官方图标库中找到相应的icon，加入购物车，再选择购物车添加到创建的项目之中，然后下载到本地。我们需要的是把iconfont.css、iconfont.eot、iconfont.svg、iconfont.ttf和iconfont.woff文件添加加到我们的开发项目中，唯一需要注意的是我们需要在iconfont.css更改下调用文件的路径，如果iconfont.eot、iconfont.svg、iconfont.ttf和iconfont.woff这些文件的位置法伤变化的话，先来个示例：
+icon新建一个项目，在官方图标库中找到相应的icon，加入购物车，再选择购物车添加到创建的项目之中，修改项目需要的样式，然后下载到本地。我们需要的是把iconfont.css、iconfont.eot、iconfont.svg、iconfont.ttf和iconfont.woff文件添加加到我们的开发项目中，唯一需要注意的是我们需要在iconfont.css更改下调用文件的路径，如果iconfont.eot、iconfont.svg、iconfont.ttf和iconfont.woff这些文件的位置法伤变化的话，先来个示例：
 ```
 //初始路径引用
 src: url('iconfont.eot?t=1527155202633'); /* IE9*/
@@ -1409,7 +1409,7 @@ src: url('iconfont.eot?t=1527155202633'); /* IE9*/
 src: url('./iconfont/iconfont.eot?t=1527155202633'); /* IE9*/
 ```
 
-iconfont.css是全局样式，如何去使用前面有提到。在项目中是这么来使用的，首先在相应的区域添加一个iconfont的类，然后来那个区域使用在iconfont官网复制下来的代码，下面请看案例：<br>
+iconfont.css是全局样式，如何去使用前面有提到（在main.js中`import "./assets/styles/iconfont.css";`）。在项目中是这么来使用的，首先在相应的区域添加一个iconfont的类，然后来那个区域使用在iconfont官网复制下来的代码，下面请看案例：<br>
 `<span class="iconfont">&#xe624;</span>`
 
 
