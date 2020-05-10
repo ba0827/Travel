@@ -1,4 +1,5 @@
 <?php
-echo phpinfo();
+echo phpinfo() ;
 1234567
+echo phpinfo();
 ?>
